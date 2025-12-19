@@ -3,7 +3,7 @@
 package com.userplex.api.client
 
 import com.userplex.api.core.ClientOptions
-import com.userplex.api.services.blocking.EventService
+import com.userplex.api.services.blocking.LogService
 import com.userplex.api.services.blocking.UserService
 
 /**
@@ -44,7 +44,7 @@ interface UserplexClient {
 
     fun users(): UserService
 
-    fun events(): EventService
+    fun logs(): LogService
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -71,6 +71,6 @@ interface UserplexClient {
 
         fun users(): UserService.WithRawResponse
 
-        fun events(): EventService.WithRawResponse
+        fun logs(): LogService.WithRawResponse
     }
 }
