@@ -3,7 +3,7 @@
 package com.userplex.api.client
 
 import com.userplex.api.core.ClientOptions
-import com.userplex.api.services.async.EventServiceAsync
+import com.userplex.api.services.async.LogServiceAsync
 import com.userplex.api.services.async.UserServiceAsync
 
 /**
@@ -44,7 +44,7 @@ interface UserplexClientAsync {
 
     fun users(): UserServiceAsync
 
-    fun events(): EventServiceAsync
+    fun logs(): LogServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -75,6 +75,6 @@ interface UserplexClientAsync {
 
         fun users(): UserServiceAsync.WithRawResponse
 
-        fun events(): EventServiceAsync.WithRawResponse
+        fun logs(): LogServiceAsync.WithRawResponse
     }
 }
