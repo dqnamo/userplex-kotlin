@@ -1,21 +1,26 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.userplex.api.models.events
+package com.userplex.api.models.logs
 
 import com.userplex.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class EventNewParamsTest {
+internal class LogNewParamsTest {
 
     @Test
     fun create() {
-        EventNewParams.builder()
+        LogNewParams.builder()
             .name("name")
             .userId("user_id")
+            .data(
+                LogNewParams.Data.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
             .properties(
-                EventNewParams.Properties.builder()
+                LogNewParams.Properties.builder()
                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                     .build()
             )
@@ -26,11 +31,16 @@ internal class EventNewParamsTest {
     @Test
     fun body() {
         val params =
-            EventNewParams.builder()
+            LogNewParams.builder()
                 .name("name")
                 .userId("user_id")
+                .data(
+                    LogNewParams.Data.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .properties(
-                    EventNewParams.Properties.builder()
+                    LogNewParams.Properties.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                         .build()
                 )
@@ -41,9 +51,15 @@ internal class EventNewParamsTest {
 
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.userId()).isEqualTo("user_id")
+        assertThat(body.data())
+            .isEqualTo(
+                LogNewParams.Data.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(body.properties())
             .isEqualTo(
-                EventNewParams.Properties.builder()
+                LogNewParams.Properties.builder()
                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                     .build()
             )
@@ -52,7 +68,7 @@ internal class EventNewParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = EventNewParams.builder().name("name").userId("user_id").build()
+        val params = LogNewParams.builder().name("name").userId("user_id").build()
 
         val body = params._body()
 

@@ -4,8 +4,8 @@ package com.userplex.api.client
 
 import com.userplex.api.core.ClientOptions
 import com.userplex.api.core.getPackageVersion
-import com.userplex.api.services.async.EventServiceAsync
-import com.userplex.api.services.async.EventServiceAsyncImpl
+import com.userplex.api.services.async.LogServiceAsync
+import com.userplex.api.services.async.LogServiceAsyncImpl
 import com.userplex.api.services.async.UserServiceAsync
 import com.userplex.api.services.async.UserServiceAsyncImpl
 
@@ -28,9 +28,7 @@ class UserplexClientAsyncImpl(private val clientOptions: ClientOptions) : Userpl
 
     private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val events: EventServiceAsync by lazy {
-        EventServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val logs: LogServiceAsync by lazy { LogServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     override fun sync(): UserplexClient = sync
 
@@ -41,7 +39,7 @@ class UserplexClientAsyncImpl(private val clientOptions: ClientOptions) : Userpl
 
     override fun users(): UserServiceAsync = users
 
-    override fun events(): EventServiceAsync = events
+    override fun logs(): LogServiceAsync = logs
 
     override fun close() = clientOptions.close()
 
@@ -52,8 +50,8 @@ class UserplexClientAsyncImpl(private val clientOptions: ClientOptions) : Userpl
             UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val events: EventServiceAsync.WithRawResponse by lazy {
-            EventServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        private val logs: LogServiceAsync.WithRawResponse by lazy {
+            LogServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -65,6 +63,6 @@ class UserplexClientAsyncImpl(private val clientOptions: ClientOptions) : Userpl
 
         override fun users(): UserServiceAsync.WithRawResponse = users
 
-        override fun events(): EventServiceAsync.WithRawResponse = events
+        override fun logs(): LogServiceAsync.WithRawResponse = logs
     }
 }

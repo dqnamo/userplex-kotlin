@@ -11,7 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Userplex API")
                 description.set("API for Userplex product analytics")
-                url.set("https://www.github.com/stainless-sdks/userplex-kotlin")
+                url.set("https://www.github.com/dqnamo/userplex-kotlin")
 
                 licenses {
                     license {
@@ -26,9 +26,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/userplex-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/userplex-kotlin.git")
-                    url.set("https://github.com/stainless-sdks/userplex-kotlin")
+                    connection.set("scm:git:git://github.com/dqnamo/userplex-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/dqnamo/userplex-kotlin.git")
+                    url.set("https://github.com/dqnamo/userplex-kotlin")
                 }
 
                 versionMapping {

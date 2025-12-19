@@ -4,8 +4,8 @@ package com.userplex.api.client
 
 import com.userplex.api.core.ClientOptions
 import com.userplex.api.core.getPackageVersion
-import com.userplex.api.services.blocking.EventService
-import com.userplex.api.services.blocking.EventServiceImpl
+import com.userplex.api.services.blocking.LogService
+import com.userplex.api.services.blocking.LogServiceImpl
 import com.userplex.api.services.blocking.UserService
 import com.userplex.api.services.blocking.UserServiceImpl
 
@@ -28,7 +28,7 @@ class UserplexClientImpl(private val clientOptions: ClientOptions) : UserplexCli
 
     private val users: UserService by lazy { UserServiceImpl(clientOptionsWithUserAgent) }
 
-    private val events: EventService by lazy { EventServiceImpl(clientOptionsWithUserAgent) }
+    private val logs: LogService by lazy { LogServiceImpl(clientOptionsWithUserAgent) }
 
     override fun async(): UserplexClientAsync = async
 
@@ -39,7 +39,7 @@ class UserplexClientImpl(private val clientOptions: ClientOptions) : UserplexCli
 
     override fun users(): UserService = users
 
-    override fun events(): EventService = events
+    override fun logs(): LogService = logs
 
     override fun close() = clientOptions.close()
 
@@ -50,8 +50,8 @@ class UserplexClientImpl(private val clientOptions: ClientOptions) : UserplexCli
             UserServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val events: EventService.WithRawResponse by lazy {
-            EventServiceImpl.WithRawResponseImpl(clientOptions)
+        private val logs: LogService.WithRawResponse by lazy {
+            LogServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -63,6 +63,6 @@ class UserplexClientImpl(private val clientOptions: ClientOptions) : UserplexCli
 
         override fun users(): UserService.WithRawResponse = users
 
-        override fun events(): EventService.WithRawResponse = events
+        override fun logs(): LogService.WithRawResponse = logs
     }
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.userplex.api.models.events
+package com.userplex.api.models.logs
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -21,10 +21,10 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Creates or uses an existing event and records an event occurrence for an end user. Requires a
- * valid API key for authentication.
+ * Creates or uses an existing log and records a log occurrence for an end user. Requires a valid
+ * API key for authentication.
  */
-class EventNewParams
+class LogNewParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
@@ -46,7 +46,15 @@ private constructor(
     fun userId(): String = body.userId()
 
     /**
-     * Additional event properties
+     * Additional log data
+     *
+     * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun data(): Data? = body.data()
+
+    /**
+     * Alias for data, for compatibility
      *
      * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -54,7 +62,7 @@ private constructor(
     fun properties(): Properties? = body.properties()
 
     /**
-     * Event timestamp (ISO 8601)
+     * Log timestamp (ISO 8601)
      *
      * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -74,6 +82,13 @@ private constructor(
      * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _userId(): JsonField<String> = body._userId()
+
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _data(): JsonField<Data> = body._data()
 
     /**
      * Returns the raw JSON value of [properties].
@@ -102,7 +117,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [EventNewParams].
+         * Returns a mutable builder for constructing an instance of [LogNewParams].
          *
          * The following fields are required:
          * ```kotlin
@@ -113,17 +128,17 @@ private constructor(
         fun builder() = Builder()
     }
 
-    /** A builder for [EventNewParams]. */
+    /** A builder for [LogNewParams]. */
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(eventNewParams: EventNewParams) = apply {
-            body = eventNewParams.body.toBuilder()
-            additionalHeaders = eventNewParams.additionalHeaders.toBuilder()
-            additionalQueryParams = eventNewParams.additionalQueryParams.toBuilder()
+        internal fun from(logNewParams: LogNewParams) = apply {
+            body = logNewParams.body.toBuilder()
+            additionalHeaders = logNewParams.additionalHeaders.toBuilder()
+            additionalQueryParams = logNewParams.additionalQueryParams.toBuilder()
         }
 
         /**
@@ -133,8 +148,10 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [name]
          * - [userId]
+         * - [data]
          * - [properties]
          * - [timestamp]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -159,7 +176,18 @@ private constructor(
          */
         fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
 
-        /** Additional event properties */
+        /** Additional log data */
+        fun data(data: Data) = apply { body.data(data) }
+
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun data(data: JsonField<Data>) = apply { body.data(data) }
+
+        /** Alias for data, for compatibility */
         fun properties(properties: Properties) = apply { body.properties(properties) }
 
         /**
@@ -171,7 +199,7 @@ private constructor(
          */
         fun properties(properties: JsonField<Properties>) = apply { body.properties(properties) }
 
-        /** Event timestamp (ISO 8601) */
+        /** Log timestamp (ISO 8601) */
         fun timestamp(timestamp: OffsetDateTime) = apply { body.timestamp(timestamp) }
 
         /**
@@ -301,7 +329,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [EventNewParams].
+         * Returns an immutable instance of [LogNewParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -313,8 +341,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): EventNewParams =
-            EventNewParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
+        fun build(): LogNewParams =
+            LogNewParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _body(): Body = body
@@ -328,6 +356,7 @@ private constructor(
     private constructor(
         private val name: JsonField<String>,
         private val userId: JsonField<String>,
+        private val data: JsonField<Data>,
         private val properties: JsonField<Properties>,
         private val timestamp: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -337,13 +366,14 @@ private constructor(
         private constructor(
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("properties")
             @ExcludeMissing
             properties: JsonField<Properties> = JsonMissing.of(),
             @JsonProperty("timestamp")
             @ExcludeMissing
             timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(name, userId, properties, timestamp, mutableMapOf())
+        ) : this(name, userId, data, properties, timestamp, mutableMapOf())
 
         /**
          * @throws UserplexInvalidDataException if the JSON field has an unexpected type or is
@@ -360,7 +390,15 @@ private constructor(
         fun userId(): String = userId.getRequired("user_id")
 
         /**
-         * Additional event properties
+         * Additional log data
+         *
+         * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun data(): Data? = data.getNullable("data")
+
+        /**
+         * Alias for data, for compatibility
          *
          * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -368,7 +406,7 @@ private constructor(
         fun properties(): Properties? = properties.getNullable("properties")
 
         /**
-         * Event timestamp (ISO 8601)
+         * Log timestamp (ISO 8601)
          *
          * @throws UserplexInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -388,6 +426,13 @@ private constructor(
          * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
         /**
          * Returns the raw JSON value of [properties].
@@ -438,6 +483,7 @@ private constructor(
 
             private var name: JsonField<String>? = null
             private var userId: JsonField<String>? = null
+            private var data: JsonField<Data> = JsonMissing.of()
             private var properties: JsonField<Properties> = JsonMissing.of()
             private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -445,6 +491,7 @@ private constructor(
             internal fun from(body: Body) = apply {
                 name = body.name
                 userId = body.userId
+                data = body.data
                 properties = body.properties
                 timestamp = body.timestamp
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -473,7 +520,19 @@ private constructor(
              */
             fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
-            /** Additional event properties */
+            /** Additional log data */
+            fun data(data: Data) = data(JsonField.of(data))
+
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun data(data: JsonField<Data>) = apply { this.data = data }
+
+            /** Alias for data, for compatibility */
             fun properties(properties: Properties) = properties(JsonField.of(properties))
 
             /**
@@ -487,7 +546,7 @@ private constructor(
                 this.properties = properties
             }
 
-            /** Event timestamp (ISO 8601) */
+            /** Log timestamp (ISO 8601) */
             fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
             /**
@@ -537,6 +596,7 @@ private constructor(
                 Body(
                     checkRequired("name", name),
                     checkRequired("userId", userId),
+                    data,
                     properties,
                     timestamp,
                     additionalProperties.toMutableMap(),
@@ -552,6 +612,7 @@ private constructor(
 
             name()
             userId()
+            data()?.validate()
             properties()?.validate()
             timestamp()
             validated = true
@@ -574,6 +635,7 @@ private constructor(
         internal fun validity(): Int =
             (if (name.asKnown() == null) 0 else 1) +
                 (if (userId.asKnown() == null) 0 else 1) +
+                (data.asKnown()?.validity() ?: 0) +
                 (properties.asKnown()?.validity() ?: 0) +
                 (if (timestamp.asKnown() == null) 0 else 1)
 
@@ -585,22 +647,121 @@ private constructor(
             return other is Body &&
                 name == other.name &&
                 userId == other.userId &&
+                data == other.data &&
                 properties == other.properties &&
                 timestamp == other.timestamp &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(name, userId, properties, timestamp, additionalProperties)
+            Objects.hash(name, userId, data, properties, timestamp, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{name=$name, userId=$userId, properties=$properties, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+            "Body{name=$name, userId=$userId, data=$data, properties=$properties, timestamp=$timestamp, additionalProperties=$additionalProperties}"
     }
 
-    /** Additional event properties */
+    /** Additional log data */
+    class Data
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Data]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(data: Data) = apply {
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Data = Data(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: UserplexInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Data && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Data{additionalProperties=$additionalProperties}"
+    }
+
+    /** Alias for data, for compatibility */
     class Properties
     @JsonCreator
     private constructor(
@@ -703,7 +864,7 @@ private constructor(
             return true
         }
 
-        return other is EventNewParams &&
+        return other is LogNewParams &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -712,5 +873,5 @@ private constructor(
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "EventNewParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "LogNewParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

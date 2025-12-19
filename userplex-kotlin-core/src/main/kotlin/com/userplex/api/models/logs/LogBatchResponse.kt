@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.userplex.api.models.events
+package com.userplex.api.models.logs
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -15,17 +15,27 @@ import com.userplex.api.errors.UserplexInvalidDataException
 import java.util.Collections
 import java.util.Objects
 
-class EventNewResponse
+class LogBatchResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val count: JsonField<Double>,
     private val success: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("success") @ExcludeMissing success: JsonField<Boolean> = JsonMissing.of()
-    ) : this(success, mutableMapOf())
+        @JsonProperty("count") @ExcludeMissing count: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("success") @ExcludeMissing success: JsonField<Boolean> = JsonMissing.of(),
+    ) : this(count, success, mutableMapOf())
+
+    /**
+     * Number of logs processed
+     *
+     * @throws UserplexInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun count(): Double = count.getRequired("count")
 
     /**
      * Operation success status
@@ -34,6 +44,13 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun success(): Boolean = success.getRequired("success")
+
+    /**
+     * Returns the raw JSON value of [count].
+     *
+     * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Double> = count
 
     /**
      * Returns the raw JSON value of [success].
@@ -57,26 +74,40 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [EventNewResponse].
+         * Returns a mutable builder for constructing an instance of [LogBatchResponse].
          *
          * The following fields are required:
          * ```kotlin
+         * .count()
          * .success()
          * ```
          */
         fun builder() = Builder()
     }
 
-    /** A builder for [EventNewResponse]. */
+    /** A builder for [LogBatchResponse]. */
     class Builder internal constructor() {
 
+        private var count: JsonField<Double>? = null
         private var success: JsonField<Boolean>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(eventNewResponse: EventNewResponse) = apply {
-            success = eventNewResponse.success
-            additionalProperties = eventNewResponse.additionalProperties.toMutableMap()
+        internal fun from(logBatchResponse: LogBatchResponse) = apply {
+            count = logBatchResponse.count
+            success = logBatchResponse.success
+            additionalProperties = logBatchResponse.additionalProperties.toMutableMap()
         }
+
+        /** Number of logs processed */
+        fun count(count: Double) = count(JsonField.of(count))
+
+        /**
+         * Sets [Builder.count] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.count] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun count(count: JsonField<Double>) = apply { this.count = count }
 
         /** Operation success status */
         fun success(success: Boolean) = success(JsonField.of(success))
@@ -109,28 +140,34 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [EventNewResponse].
+         * Returns an immutable instance of [LogBatchResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```kotlin
+         * .count()
          * .success()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): EventNewResponse =
-            EventNewResponse(checkRequired("success", success), additionalProperties.toMutableMap())
+        fun build(): LogBatchResponse =
+            LogBatchResponse(
+                checkRequired("count", count),
+                checkRequired("success", success),
+                additionalProperties.toMutableMap(),
+            )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): EventNewResponse = apply {
+    fun validate(): LogBatchResponse = apply {
         if (validated) {
             return@apply
         }
 
+        count()
         success()
         validated = true
     }
@@ -148,22 +185,24 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int = (if (success.asKnown() == null) 0 else 1)
+    internal fun validity(): Int =
+        (if (count.asKnown() == null) 0 else 1) + (if (success.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is EventNewResponse &&
+        return other is LogBatchResponse &&
+            count == other.count &&
             success == other.success &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(success, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(count, success, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EventNewResponse{success=$success, additionalProperties=$additionalProperties}"
+        "LogBatchResponse{count=$count, success=$success, additionalProperties=$additionalProperties}"
 }
